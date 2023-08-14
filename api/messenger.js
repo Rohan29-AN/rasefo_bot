@@ -60,7 +60,7 @@ function sendText(senderId, messageData) {
     console.log("Url base", url_base)
     console.log("Message alefa", messageData)
     axios.post(url_base, {
-        recipient: { id: "3528212590828501" },
+        recipient: { id: process.env.USER_ID },
         message: {
             text: messageData
         },

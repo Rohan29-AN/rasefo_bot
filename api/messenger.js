@@ -2,6 +2,7 @@ const { default: axios } = require("axios");
 
 function sendAPI(senderId, input) {
     console.log("Tonga aty", senderId)
+    console.log("Message: " + input)
     //check type of message
     const isNumber = /^-?\d+(\.\d+)?$/.test(input);
     let filter = ''
@@ -11,7 +12,7 @@ function sendAPI(senderId, input) {
     else {
         filter = 'name'
     }
-    let url_base = process.env.API_BACC + filter + '/' + "KOTO Marcel"
+    let url_base = process.env.API_BACC + filter + '/' + input.trim()
     console.log(url_base)
     axios.get(url_base).then((res) => {
         /* console.log(`Status: ${res.status}`)*/
@@ -60,7 +61,7 @@ function sendText(senderId, messageData) {
     console.log("Url base", url_base)
     console.log("Message alefa", messageData)
     axios.post(url_base, {
-        recipient: { id: process.env.USER_ID },
+        recipient: { id: senderId},
         message: {
             text: messageData
         },

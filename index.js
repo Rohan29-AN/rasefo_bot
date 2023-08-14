@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const { config } = require('dotenv')
 const webhook = require('./api/webhook');
+const messenger = require('./api/messenger');
 
 config()
 
@@ -55,7 +56,16 @@ app.post('/webhook', (req, res) => {
         console.log("OK")
         body.entry.forEach((entry) => {
             const webhookEvent = entry.messaging[0];
-            webhook.handleWebhookEvent(webhookEvent);
+            //check if user clicked on "Get started"
+            if (webhookEvent.postback && webhookEvent.postback.payload === 'GET_STARTED') {
+                const message = "Tongasoa ny akama, ampidirino ny anarana feno na ny laharana."
+                const senderId = webhookEvent.sender.id
+                messenger.sendText(senderId, message)
+            }
+            else {
+                webhook.handleWebhookEvent(webhookEvent);
+            }
+
         });
         res.status(200).send('EVENT_RECEIVED');
     } else {

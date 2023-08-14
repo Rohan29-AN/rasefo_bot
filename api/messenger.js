@@ -1,21 +1,18 @@
 const { default: axios } = require("axios");
 
 function sendAPI(senderId, input) {
-    console.log("Tonga aty", senderId)
-    console.log("Message: " + input)
     //check type of message
     const isNumber = /^-?\d+(\.\d+)?$/.test(input);
     let filter = ''
     if (isNumber) {
-        filter = ''
+        filter = 'num'
     }
     else {
         filter = 'name'
     }
     let url_base = process.env.API_BACC + filter + '/' + input.trim()
-    console.log(url_base)
     axios.get(url_base).then((res) => {
-        /* console.log(`Status: ${res.status}`)*/
+
         console.log('Body', res.data.bacc)
         let result = ''
         if (res.data.bacc.length > 0) {
@@ -34,7 +31,6 @@ function sendAPI(senderId, input) {
             result = 'Ooops, hamarino tsara ny anarana na ny laharana azafady'
         }
 
-        console.log(result)
 
         sendText(senderId, result)
     }).catch((err) => {
@@ -43,9 +39,6 @@ function sendAPI(senderId, input) {
 }
 
 function sendText(senderId, messageData) {
-    console.log("SenderId ", senderId)
-    console.log("MessageData ", messageData)
-
 
     const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
     const axiosConfig = {
@@ -75,5 +68,6 @@ function sendText(senderId, messageData) {
 }
 
 module.exports = {
-    sendAPI
+    sendAPI,
+    sendText
 }

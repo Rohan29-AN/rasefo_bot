@@ -1,48 +1,78 @@
 const { default: axios } = require("axios");
 
-function sendAPI(senderId,input){
+function sendAPI(senderId, input) {
+    console.log("Tonga aty", senderId)
     //check type of message
     const isNumber = /^-?\d+(\.\d+)?$/.test(input);
-    let filter=''
-    if(isNumber){
-        filter=''
+    let filter = ''
+    if (isNumber) {
+        filter = ''
     }
-    else{
-        filter='name'
+    else {
+        filter = 'name'
     }
-    let url_base=process.env.API_BACC+'/'+filter+'/'+input
+    let url_base = process.env.API_BACC + filter + '/' + "KOTO Marcel"
     console.log(url_base)
-    axios.get(url_base).then((res)=>{
-        console.log(`Status: ${res.status}`)
-        console.log('Body',res.data)
-        const result=res.data
+    axios.get(url_base).then((res) => {
+        /* console.log(`Status: ${res.status}`)*/
+        console.log('Body', res.data.bacc)
+        let result = ''
+        if (res.data.bacc.length > 0) {
 
-        sendText(senderId,result)
-    }).catch((err)=>{
+            console.log("Atoooo")
+            let data_user = res.data.bacc[0]
+            if (data_user.resultat === 'Admis') {
+                result = 'Arahabaina enao Rasefo ' + data_user.nom + ' (' + data_user.num + ' - Serie' + data_user.serie + ') fa afaka avec mention ' + data_user.mention
+
+            }
+            else {
+                result = 'Mahereza ry akamako , aza kivy fa ataovy milay ny @ heritaona. Vitanao io Sefo a'
+            }
+        }
+        else {
+            result = 'Ooops, hamarino tsara ny anarana na ny laharana azafady'
+        }
+
+        console.log(result)
+
+        sendText(senderId, result)
+    }).catch((err) => {
         console.log("Error: ${err.message}")
     });
 }
 
-function sendText(senderId,messageData){
-    const PAGE_ACCESS_TOKEN=process.env.PAGE_ACCESS_TOKEN
-    const messageData={
-        text:messageData
-    }
+function sendText(senderId, messageData) {
+    console.log("SenderId ", senderId)
+    console.log("MessageData ", messageData)
 
-    axios.post('https://graph.facebook.com/v13.0/me/messages', {
-        recipient: { id: senderId },
-        message: messageData,
-      }, {
-        params: { access_token: PAGE_ACCESS_TOKEN },
-      })
-      .then(response => {
-        console.log('Message sent:', response.data);
-      })
-      .catch(error => {
-        console.error('Error sending message:', error);
-      });
+
+    const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
+    const axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        params: {
+            access_token: PAGE_ACCESS_TOKEN,
+        }
+    };
+
+    let url_base = 'https://graph.facebook.com/v17.0/' + process.env.PAGE_ID + '/messages'
+    console.log("Url base", url_base)
+    console.log("Message alefa", messageData)
+    axios.post(url_base, {
+        recipient: { id: "3528212590828501" },
+        message: {
+            text: messageData
+        },
+    }, axiosConfig)
+        .then(response => {
+            console.log('Message sent:', response.data);
+        })
+        .catch(error => {
+            console.error('Error sending message:', error.response.data);
+        });
 }
 
-module.exports={
+module.exports = {
     sendAPI
 }

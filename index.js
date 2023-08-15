@@ -12,6 +12,10 @@ const PORT = process.env.PORT || 3000
 app.use(bodyParser.json())
 
 
+app.get('/',(req,res) => {
+    res.send("Welcome to Rasefo Bot")
+})
+
 app.get('/webhook', (req, res) => {
     const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
     const mode = req.query['hub.mode'];
@@ -19,9 +23,8 @@ app.get('/webhook', (req, res) => {
     const challenge = req.query['hub.challenge'];
 
 
-    console.log("req query: " + req.query);
     if (mode && (token === VERIFY_TOKEN)) {
-        console.log("Token Ok")
+        console.log("TOKEN OK")
         res.status(200).send(challenge);
     } else {
         res.sendStatus(403);
@@ -30,9 +33,7 @@ app.get('/webhook', (req, res) => {
 })
 
 app.post('/webhook', (req, res) => {
-    console.log("ATOOOO")
     const body = req.body;
-    console.log(body)
     if (body.object === 'user') {
         const userEvent = body.entry && body.entry[0];
 
@@ -53,18 +54,10 @@ app.post('/webhook', (req, res) => {
     }
 
     else if (body.object === 'page') {
-        console.log("OK")
         body.entry.forEach((entry) => {
             const webhookEvent = entry.messaging[0];
-            //check if user clicked on "Get started"
-            if (webhookEvent.postback && webhookEvent.postback.payload === 'GET_STARTED') {
-                const message = "Tongasoa ny akama, ampidirino ny anarana feno na ny laharana."
-                const senderId = webhookEvent.sender.id
-                messenger.sendText(senderId, message)
-            }
-            else {
-                webhook.handleWebhookEvent(webhookEvent);
-            }
+            webhook.handleWebhookEvent(webhookEvent);
+
 
         });
         res.status(200).send('EVENT_RECEIVED');

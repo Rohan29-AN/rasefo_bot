@@ -1,7 +1,7 @@
 const { default: axios } = require("axios");
 
-function sendAPI(senderId, input) {
-    console.log("Send API Ok")
+async function sendAPI(senderId, input) {
+    /*console.log("Send API Ok")
     //check type of message
     const isNumber = /^-?\d+(\.\d+)?$/.test(input);
     let filter = ''
@@ -39,10 +39,41 @@ function sendAPI(senderId, input) {
     }).catch((err) => {
         console.log("Error: ${err.message}")
     });
-    console.log("In the end")
+    console.log("In the end")*/
+
+
+    try {
+        console.log("Send API Ok");
+        const isNumber = /^-?\d+(\.\d+)?$/.test(input);
+        let filter = isNumber ? 'num' : 'name';
+        let url_base = process.env.API_BACC + filter + '/' + input.trim();
+        
+        console.log("senderId: " + senderId);
+        console.log("Base url: " + url_base);
+
+        const response = await axios.get(url_base);
+        const data = response.data;
+
+        let result = '';
+        if (data.bacc.length > 0) {
+            let data_user = data.bacc[0];
+            if (data_user.resultat === 'Admis') {
+                result = 'Arahabaina enao Rasefo ' + data_user.nom + ' (' + data_user.num + ' - Serie' + data_user.serie + ') fa afaka avec mention ' + data_user.mention;
+            } else {
+                result = 'Mahereza ry akamako, aza kivy fa ataovy milay ny @ heritaona. Vitanao io Sefo a';
+            }
+        } else {
+            result = 'Ooops, hamarino tsara ny anarana na ny laharana azafady';
+        }
+
+        await sendText(senderId, result); // Assuming sendText is asynchronous
+        console.log("In the end");
+    } catch (error) {
+        console.error("Error:", error.message);
+    }
 }
 
-function sendText(senderId, messageData) {
+async function sendText(senderId, messageData) {
 
     const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
     const axiosConfig = {

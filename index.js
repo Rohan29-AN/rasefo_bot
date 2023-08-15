@@ -16,6 +16,10 @@ app.get('/',(req,res) => {
     res.send("Welcome to Rasefo Bot")
 })
 
+app.get('/test',(req,res) => {
+    res.send("Mode test")
+})
+
 app.get('/webhook', (req, res) => {
     console.log("GET WEBHOOK")
     const VERIFY_TOKEN = process.env.VERIFY_TOKEN;

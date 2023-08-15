@@ -15,9 +15,7 @@ const PORT = process.env.PORT || 3000
 app.use(bodyParser.json())
 
 
-app.get('/',(req,res) => {
-    res.send("Welcome to Rasefo Bot")
-})
+
 
 app.get('/test',(req,res) => {
     res.send("Mode test indray")
@@ -76,6 +74,10 @@ app.post('/webhook', (req, res) => {
     }
 })
 
+
+app.get('/',(req,res) => {
+    res.send("Welcome to Rasefo Bot")
+})
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`)
 })

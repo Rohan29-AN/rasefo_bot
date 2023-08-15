@@ -12,6 +12,8 @@ function sendAPI(senderId, input) {
         filter = 'name'
     }
     let url_base = process.env.API_BACC + filter + '/' + input.trim()
+    console.log("senderId"+senderId)
+    console.log("Base url"+url_base)
     axios.get(url_base).then((res) => {
 
         console.log('Body', res.data.bacc)

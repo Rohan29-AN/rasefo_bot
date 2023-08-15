@@ -4,9 +4,12 @@ const app = express();
 const { config } = require('dotenv')
 const webhook = require('./api/webhook');
 const messenger = require('./api/messenger');
+const cors=require('cors');
 
 config()
 
+
+app.use(cors());
 
 const PORT = process.env.PORT || 3000
 app.use(bodyParser.json())

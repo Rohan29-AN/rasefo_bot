@@ -39,6 +39,7 @@ function sendAPI(senderId, input) {
     }).catch((err) => {
         console.log("Error: ${err.message}")
     });
+    console.log("In the end")
 }
 
 function sendText(senderId, messageData) {

@@ -17,7 +17,7 @@ app.get('/',(req,res) => {
 })
 
 app.get('/test',(req,res) => {
-    res.send("Mode test")
+    res.send("Mode test indray")
 })
 
 app.get('/webhook', (req, res) => {

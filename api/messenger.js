@@ -1,6 +1,7 @@
 const { default: axios } = require("axios");
 
 function sendAPI(senderId, input) {
+    console.log("Send API Ok")
     //check type of message
     const isNumber = /^-?\d+(\.\d+)?$/.test(input);
     let filter = ''

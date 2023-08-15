@@ -64,6 +64,7 @@
         else if (body.object === 'page') {
             console.log("Page ato")
             body.entry.forEach((entry) => {
+                console.log("Check ato")
                 const webhookEvent = entry.messaging[0];
                 webhook.handleWebhookEvent(webhookEvent);
 
